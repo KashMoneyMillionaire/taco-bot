@@ -10,7 +10,13 @@ var PersonSchema = new Schema({
         default: true
     },
     name: String,
-    phoneNumber: String
+    phoneNumber: String,
+    mostRecentTacoDate: {
+        type: Date, index: true
+    },
+    deferedTacoDate: {
+        type: Date
+    }
 });
 
 module.exports = mongoose.model('Person', PersonSchema);
