@@ -3,9 +3,9 @@
 var express = require('express');
 var router = express.Router();
 
-var Person = require('./models/person');
+var Person = require('../models/person');
 
-router.post('/begin', function (req, res, next) {
+router.get('/begin', function (req, res, next) {
     var person = new Person({
         name: 'Kash',
         phoneNumber: '940-232-8177'

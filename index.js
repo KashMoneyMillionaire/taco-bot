@@ -7,6 +7,6 @@ var app = express();
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGO_URL);
 
-app.use('/api', require('./api'));
+app.use('', require('./api'));
 
 app.listen(PORT);
