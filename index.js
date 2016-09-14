@@ -18,7 +18,7 @@ var config = require('./config');
 // Setup Restify Server
 var server = restify.createServer();
 server.listen(config.port, function () {});
-  
+
 // Create chat bot
 var connector = new builder.ChatConnector({
     appId: config.microsoft.appId,
@@ -29,5 +29,7 @@ var bot = new builder.UniversalBot(connector);
 server.post('/api/messages', connector.listen());
 
 bot.dialog('/', function (session) {
+    console.log('received message: ' + session.message.text );
     session.send("Hello World");
+    console.log('response sent');
 });
