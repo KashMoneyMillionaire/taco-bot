@@ -30,6 +30,8 @@ server.post('/api/messages', connector.listen());
 
 bot.dialog('/', function (session) {
     console.log('received message: ' + session.message.source );
+    console.log(session.message.address.channelId);
+    console.log(session.message.address.serviceUrl);
     session.send("Hello World");
     console.log('response sent');
 });
