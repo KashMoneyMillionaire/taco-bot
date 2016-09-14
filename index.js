@@ -29,7 +29,7 @@ var bot = new builder.UniversalBot(connector);
 server.post('/api/messages', connector.listen());
 
 bot.dialog('/', function (session) {
-    console.log('received message: ' + session.message.text );
+    console.log('received message: ' + session.message.source );
     session.send("Hello World");
     console.log('response sent');
 });
