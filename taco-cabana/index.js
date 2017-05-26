@@ -16,7 +16,11 @@ var tacoCabana = {
     getPaymentMethods: getPaymentMethods,
     searchByGeoCode: searchByGeoCode,
     getLocationInformation: getLocationInformation,
-    getMenus: getMenus
+    // getMenus: getMenus,
+    startOrder: startOrder,
+    updateOrderItems: updateOrderItems,
+    addPayment: addPayment,
+    checkPayment: checkPayment
 }
 
 /////////////////////
@@ -85,17 +89,94 @@ function getLocationMenuCategories(locationMenuModel) {
 function startOrder(locationMenuModel) {
     var data = {
         restaurantId: locationMenuModel.restaurantId,
-        customerId: locationMenuModel.menuId,
-        hour: locationMenuModel.serviceTypeId,
-        minute: locationMenuModel.serviceTypeId,
-        day: locationMenuModel.serviceTypeId,
-        month: locationMenuModel.serviceTypeId,
-        year: locationMenuModel.serviceTypeId,
-        serviceId: locationMenuModel.serviceTypeId,
-        return_order: locationMenuModel.serviceTypeId,
-        is_asap: locationMenuModel.serviceTypeId
+        customerId: locationMenuModel.customerId,
+        hour: locationMenuModel.hour,
+        minute: locationMenuModel.minute,
+        day: locationMenuModel.day,
+        month: locationMenuModel.month,
+        year: locationMenuModel.year,
+        serviceId: locationMenuModel.serviceId,
+        return_order: locationMenuModel.return_order,
+        is_asap: locationMenuModel.is_asap
     };
     return callTacoCabana('startOrder', data);
+}
+
+function updateOrderItems(updateModel) {
+    // Not sure if all of these are needed, but idk which aren't
+    var data = {
+        customerId: updateModel.customerId,
+        // items: JSON.stringify([{
+        //     basePrice: 1269,
+        //     categoryId: 763,
+        //     childItems: null,
+        //     comment: "Will be picked up by " + updateModel.customerName,
+        //     itemId: 562,
+        //     menuId: 113,
+        //     menuSelected: 763,
+        //     name: "Dozen Breakfast Taco Box - TC's Way",
+        //     orderItemId: null,
+        //     parentCategory: "113",
+        //     quantity: "2",
+        //     refName: updateModel.customerName,
+        //     uniqueId: 1473899687334
+        // }]),
+        items: JSON.stringify([{
+            basePrice: 129,
+            categoryId: 1727,
+            childItems: [{
+                categoryId: 1737,
+                itemId: 13331,
+                level: "child",
+                menuId: 113,
+                name: "Flour Tortilla",
+                pickListId: 770,
+                price: 0,
+                quantity: "1"
+            }],
+            comment: "Will be picked up by " + updateModel.customerName,
+            itemId: 177,
+            menuId: 113,
+            menuSelected: 1727,
+            name: "Bacon & Egg Taco",
+            orderItemId: null,
+            parentCategory: "113",
+            quantity: "1",
+            refName: updateModel.customerName,
+            sizeId: 30000000,
+            sizeName: "Single Taco",
+            sizePrice: 129,
+            uniqueId: 1473984795400,
+        }]),
+        orderId: updateModel.orderId
+    }
+    return callTacoCabana('updateOrderItems', data)
+        .then(order => {
+            order.coupons = order.coupons || [];
+            order.coupons.push({
+                appliedValue: -25,
+                applyToTotal: false,
+                clu: "25offTC",
+                couponId: 20633,
+                description: "25% Off First Online Order up to $50 off  Does not include alcohol. Not valid with other offers.",
+                name: "25% Off First Order",
+                orderItemCouponId: 238797,
+                startDate: "2015-07-27",
+                value: 0
+            });
+            return order;
+        });
+}
+
+function addPayment(paymentModel) {
+    return callTacoCabana('addPayment', paymentModel)
+        .then(paymentInfo => {
+            return paymentInfo.pendingPayment;
+        });
+}
+
+function checkPayment(checkPaymentModel) {
+    return callTacoCabana('checkPayment', checkPaymentModel);
 }
 
 

@@ -1,34 +1,4 @@
 
-var order = {
-    customerId: null,
-    username: 'chelsead.cline@yahoo.com',
-    password: '1',
-    geo: {
-        latitude: 32.9587226,
-        longitude: -96.82187729999998,
-        distanceToSearch: 25,
-        notActive: true
-    }
-}
-
-var tacoCabana = require('./taco-cabana');
-
-tacoCabana.searchByGeoCode(order.geo)
-    .then(function (allLocations) {
-        var closestLocation = allLocations[0];
-        return {
-            restaurantId: closestLocation.restaurantid,
-            serviceTypeId: closestLocation.services[0].service_type_id
-        }
-    })
-    .then(tacoCabana.getLocationInformation)
-    .then(function (geoData) {
-        
-    })
-    .catch(function(e) {
-        console.log(e);
-    })
-
 // var p = tacoCabana.login(order.username, order.password)
 //     .then(function (customerId) {
 //         order.customerId = customerId
